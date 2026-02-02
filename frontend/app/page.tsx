@@ -5,39 +5,40 @@ import Link from 'next/link';
 import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat } from 'react-icons/gi';
 import { FiDroplet, FiHeart, FiUsers, FiBarChart2, FiArrowRight } from 'react-icons/fi';
 
-// Farm showcase data (public, no auth needed) - Expanded herd
-const SHOWCASE_COWS = [
-  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?w=400', avgMilk: 18.5 },
-  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400', avgMilk: 16.2 },
-  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', status: 'milking', image: 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400', avgMilk: 14.8 },
-  { id: 4, tag: 'KD004', name: 'Neema', breed: 'Jersey', status: 'pregnant', image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400', avgMilk: 12.5 },
-  { id: 5, tag: 'KD005', name: 'Tumaini', breed: 'Friesian', status: 'heifer', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400', avgMilk: 0 },
-  { id: 6, tag: 'KD006', name: 'Faraja', breed: 'Holstein', status: 'milking', image: 'https://images.unsplash.com/photo-1572806903587-4a8a82e7d095?w=400', avgMilk: 17.3 },
-  { id: 7, tag: 'KD007', name: 'Amani', breed: 'Guernsey', status: 'milking', image: 'https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=400', avgMilk: 15.1 },
-  { id: 8, tag: 'KD008', name: 'Upendo', breed: 'Friesian', status: 'dry', image: 'https://images.unsplash.com/photo-1595365691689-6b7b4e1970cf?w=400', avgMilk: 0 },
-  { id: 9, tag: 'KD009', name: 'Imani', breed: 'Ayrshire', status: 'milking', image: 'https://images.unsplash.com/photo-1605152276897-4f618f831968?w=400', avgMilk: 13.9 },
-  { id: 10, tag: 'KD010', name: 'Rehema', breed: 'Jersey', status: 'pregnant', image: 'https://images.unsplash.com/photo-1563281746-48bb478e9b2a?w=400', avgMilk: 11.8 },
-  { id: 11, tag: 'KD011', name: 'Salama', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?w=400', avgMilk: 16.7 },
-  { id: 12, tag: 'KD012', name: 'Bahati', breed: 'Holstein', status: 'heifer', image: 'https://images.unsplash.com/photo-1598207079590-a85cc7c30899?w=400', avgMilk: 0 },
+// Farm showcase data - 3 Cows and 6 Sheep
+const SHOWCASE_ANIMALS = [
+  // Cows (3): 2 milking, 1 pregnant
+  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', type: 'cow', status: 'milking', image: 'https://cdn.pixabay.com/photo/2016/10/11/13/29/cow-1731377_640.jpg', avgMilk: 18.5 },
+  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Holstein', type: 'cow', status: 'milking', image: 'https://cdn.pixabay.com/photo/2017/11/08/15/16/cow-2930581_640.jpg', avgMilk: 16.2 },
+  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', type: 'cow', status: 'pregnant', image: 'https://cdn.pixabay.com/photo/2013/10/09/02/27/cow-192983_640.jpg', avgMilk: 0 },
+  // Sheep (6): 3 ewes (mothers), 1 ram, 2 lambs (young)
+  { id: 4, tag: 'KS001', name: 'Neema', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2018/07/25/08/58/sheep-3560872_640.jpg', avgMilk: 0 },
+  { id: 5, tag: 'KS002', name: 'Tumaini', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2016/11/29/04/19/sheep-1867441_640.jpg', avgMilk: 0 },
+  { id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2019/07/22/09/24/sheep-4354153_640.jpg', avgMilk: 0 },
+  { id: 7, tag: 'KS004', name: 'Simba', breed: 'Dorper', type: 'sheep', status: 'ram', image: 'https://cdn.pixabay.com/photo/2018/04/17/18/03/sheep-3327684_640.jpg', avgMilk: 0 },
+  { id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: 'https://cdn.pixabay.com/photo/2017/06/25/07/03/lamb-2441023_640.jpg', avgMilk: 0 },
+  { id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: 'https://cdn.pixabay.com/photo/2016/03/27/21/16/sheep-1284093_640.jpg', avgMilk: 0 },
 ];
 
 const FARM_STATS = {
-  totalCows: 12,
-  milkingCows: 7,
-  dailyProduction: 112.5,
-  monthlyRevenue: 202500,
+  totalCows: 3,
+  totalSheep: 6,
+  milkingCows: 2,
+  dailyProduction: 34.7,
+  monthlyRevenue: 62460,
 };
 
 export default function PublicShowcase() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Background images - verified cow/dairy farm images
   const farmImages = [
-    'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920',
-    'https://images.unsplash.com/photo-1594761051656-c5917e299789?w=1920',
-    'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=1920',
-    'https://images.unsplash.com/photo-1605152276897-4f618f831968?w=1920',
-    'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1920',
-    'https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=1920',
+    'https://cdn.pixabay.com/photo/2017/04/03/08/47/cow-2197954_1280.jpg',
+    'https://cdn.pixabay.com/photo/2016/10/11/13/29/cow-1731377_1280.jpg',
+    'https://cdn.pixabay.com/photo/2015/05/04/10/03/cow-752458_1280.jpg',
+    'https://cdn.pixabay.com/photo/2017/11/08/15/16/cow-2930581_1280.jpg',
+    'https://cdn.pixabay.com/photo/2019/07/17/15/27/calf-4344336_1280.jpg',
+    'https://cdn.pixabay.com/photo/2016/07/11/15/09/cow-1509258_1280.jpg',
   ];
 
   useEffect(() => {
@@ -85,16 +86,21 @@ export default function PublicShowcase() {
 
         {/* Stats Bar */}
         <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur">
-          <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-white text-center">
+          <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-5 gap-4 text-white text-center">
             <div>
               <GiCow className="text-3xl mx-auto mb-2 text-green-400" />
               <p className="text-3xl font-bold">{FARM_STATS.totalCows}</p>
-              <p className="text-sm text-gray-300">Total Cows</p>
+              <p className="text-sm text-gray-300">Dairy Cows</p>
+            </div>
+            <div>
+              <span className="text-3xl mx-auto mb-2 block">🐑</span>
+              <p className="text-3xl font-bold">{FARM_STATS.totalSheep}</p>
+              <p className="text-sm text-gray-300">Sheep</p>
             </div>
             <div>
               <FiDroplet className="text-3xl mx-auto mb-2 text-blue-400" />
               <p className="text-3xl font-bold">{FARM_STATS.dailyProduction}L</p>
-              <p className="text-sm text-gray-300">Daily Production</p>
+              <p className="text-sm text-gray-300">Daily Milk</p>
             </div>
             <div>
               <FiHeart className="text-3xl mx-auto mb-2 text-red-400" />
@@ -110,9 +116,9 @@ export default function PublicShowcase() {
         </div>
       </section>
 
-      {/* Farm Showcase Section */}
+      {/* Farm Showcase Section - Full Width */}
       <section id="showcase" className="py-20 bg-gradient-to-b from-green-50 to-white">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="px-4 md:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Herd</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -120,36 +126,46 @@ export default function PublicShowcase() {
             </p>
           </div>
 
-          {/* Cows Grid - Expanded */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-            {SHOWCASE_COWS.map((cow) => (
-              <div key={cow.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
+          {/* Animals Grid - Full Width */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-16">
+            {SHOWCASE_ANIMALS.map((animal) => (
+              <div key={animal.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
                 <div className="h-48 overflow-hidden relative">
                   <img
-                    src={cow.image}
-                    alt={cow.name}
+                    src={animal.image}
+                    alt={animal.name}
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
+                  <div className="absolute top-2 left-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium shadow-md ${
+                      animal.type === 'cow' ? 'bg-green-700 text-white' : 'bg-amber-600 text-white'
+                    }`}>
+                      {animal.type === 'cow' ? '🐄 Cow' : '🐑 Sheep'}
+                    </span>
+                  </div>
                   <div className="absolute top-2 right-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium shadow-md ${
-                      cow.status === 'milking' ? 'bg-green-500 text-white' :
-                      cow.status === 'pregnant' ? 'bg-blue-500 text-white' :
-                      cow.status === 'dry' ? 'bg-yellow-500 text-white' :
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium shadow-md ${
+                      animal.status === 'milking' ? 'bg-green-500 text-white' :
+                      animal.status === 'pregnant' ? 'bg-blue-500 text-white' :
+                      animal.status === 'dry' ? 'bg-yellow-500 text-white' :
+                      animal.status === 'ewe' ? 'bg-pink-500 text-white' :
+                      animal.status === 'ram' ? 'bg-indigo-600 text-white' :
+                      animal.status === 'lamb' ? 'bg-orange-400 text-white' :
                       'bg-purple-500 text-white'
                     }`}>
-                      {cow.status.charAt(0).toUpperCase() + cow.status.slice(1)}
+                      {animal.status.charAt(0).toUpperCase() + animal.status.slice(1)}
                     </span>
                   </div>
                 </div>
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-bold text-gray-800">{cow.tag}</h3>
+                    <h3 className="text-lg font-bold text-gray-800">{animal.tag}</h3>
                   </div>
-                  <p className="text-gray-600 text-sm mb-2">{cow.name} - {cow.breed}</p>
-                  {cow.avgMilk > 0 && (
+                  <p className="text-gray-600 text-sm mb-2">{animal.name} - {animal.breed}</p>
+                  {animal.avgMilk > 0 && (
                     <div className="flex items-center gap-2 text-blue-600 text-sm">
                       <FiDroplet />
-                      <span className="font-medium">{cow.avgMilk} L/day avg</span>
+                      <span className="font-medium">{animal.avgMilk} L/day avg</span>
                     </div>
                   )}
                 </div>
@@ -158,7 +174,7 @@ export default function PublicShowcase() {
           </div>
 
           {/* Farm Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white p-6 rounded-xl shadow text-center">
               <GiMilkCarton className="text-5xl text-blue-500 mx-auto mb-4" />
               <h3 className="font-bold text-gray-800 mb-2">Quality Milk</h3>
@@ -185,10 +201,10 @@ export default function PublicShowcase() {
 
       {/* Farm Layout Section */}
       <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="px-4 md:px-8 lg:px-12">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Farm Layout</h2>
-            <p className="text-gray-600">Our well-planned dairy farm in Eldoret</p>
+            <p className="text-gray-600">Our well-planned dairy farm in Chepalungu, Bomet</p>
           </div>
 
           <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-8">
