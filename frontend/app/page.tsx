@@ -214,7 +214,7 @@ export default function PublicShowcase() {
                   <p className="text-gray-500">Weight</p>
                   <p className="font-semibold">{selectedAnimal.weight}</p>
                 </div>
-                {selectedAnimal.avgMilk > 0 && (
+                {selectedAnimal.avgMilk && selectedAnimal.avgMilk > 0 && (
                   <div className="bg-blue-50 p-3 rounded-lg col-span-2">
                     <p className="text-blue-600">Daily Milk Production</p>
                     <p className="font-semibold text-blue-800">{selectedAnimal.avgMilk} Liters/day</p>
