@@ -37,6 +37,9 @@ class Command(BaseCommand):
         # Create admin user and farm
         admin_user, farm = self.create_admin_and_farm()
 
+        # Create sample users with different roles
+        self.create_sample_users(farm)
+
         # Create sample data
         self.create_sample_cows(farm)
         self.create_sample_feed_items(farm)
@@ -56,6 +59,8 @@ class Command(BaseCommand):
             ("worker", "Farm worker with limited access"),
             ("vet", "Veterinarian with health-related access"),
             ("admin", "System administrator"),
+            ("auditor", "Financial auditor with read-only access"),
+            ("procurement", "Procurement officer for supplies and purchases"),
         ]
 
         for name, description in roles:
@@ -116,6 +121,75 @@ class Command(BaseCommand):
             self.stdout.write(f"  Farm already exists: {farm.name}")
 
         return admin_user, farm
+
+    def create_sample_users(self, farm):
+        """Create sample users with different roles for testing"""
+        from apps.farm.models import Role, FarmMembership
+
+        sample_users = [
+            {
+                "phone": "0711111111",
+                "full_name": "John Kipchoge",
+                "password": "worker123",
+                "role": "worker",
+            },
+            {
+                "phone": "0722222222",
+                "full_name": "Mary Wanjiku",
+                "password": "worker123",
+                "role": "worker",
+            },
+            {
+                "phone": "0733333333",
+                "full_name": "Dr. Peter Ochieng",
+                "password": "vet12345",
+                "role": "vet",
+            },
+            {
+                "phone": "0744444444",
+                "full_name": "Sarah Kimani",
+                "password": "auditor123",
+                "role": "auditor",
+            },
+            {
+                "phone": "0755555555",
+                "full_name": "James Mwangi",
+                "password": "procure123",
+                "role": "procurement",
+            },
+        ]
+
+        for user_data in sample_users:
+            role = Role.objects.get(name=user_data["role"])
+
+            user, created = User.objects.get_or_create(
+                phone=user_data["phone"],
+                defaults={
+                    "full_name": user_data["full_name"],
+                    "is_staff": False,
+                    "is_superuser": False,
+                }
+            )
+
+            if created:
+                user.set_password(user_data["password"])
+                user.active_farm = farm
+                user.save()
+
+                # Create farm membership
+                FarmMembership.objects.get_or_create(
+                    user=user,
+                    farm=farm,
+                    defaults={"role": role}
+                )
+
+        self.stdout.write(f"  Created {len(sample_users)} sample users")
+        self.stdout.write("  Sample users:")
+        self.stdout.write("    Worker 1: 0711111111 / worker123")
+        self.stdout.write("    Worker 2: 0722222222 / worker123")
+        self.stdout.write("    Vet: 0733333333 / vet12345")
+        self.stdout.write("    Auditor: 0744444444 / auditor123")
+        self.stdout.write("    Procurement: 0755555555 / procure123")
 
     def create_sample_cows(self, farm):
         from apps.dairy.models import Cow

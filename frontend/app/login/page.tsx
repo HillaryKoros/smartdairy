@@ -27,8 +27,8 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
-      phone: '0700000000',
-      password: 'admin123',
+      phone: '',
+      password: '',
     },
   });
 
@@ -125,12 +125,6 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Demo credentials hint */}
-          <div className="mt-6 p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 text-center">
-              Demo: Phone <strong>0700000000</strong>, Password <strong>admin123</strong>
-            </p>
-          </div>
         </div>
       </div>
     </div>

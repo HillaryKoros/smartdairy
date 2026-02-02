@@ -2,22 +2,30 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat } from 'react-icons/gi';
-import { FiDroplet, FiHeart, FiUsers, FiBarChart2, FiArrowRight } from 'react-icons/fi';
+import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat, GiMeat } from 'react-icons/gi';
+import { FiDroplet, FiHeart, FiPhone, FiShoppingCart, FiX, FiMenu } from 'react-icons/fi';
 
-// Farm showcase data - 3 Cows and 6 Sheep (using local images)
+// Animal data with detailed characteristics
 const SHOWCASE_ANIMALS = [
   // Cows (3): 2 milking, 1 pregnant
-  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', type: 'cow', status: 'milking', image: '/images/cows/IMG-20240527-WA0009.jpg', avgMilk: 18.5 },
-  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Holstein', type: 'cow', status: 'milking', image: '/images/cows/istockphoto-1072682504-612x612.jpg', avgMilk: 16.2 },
-  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', type: 'cow', status: 'pregnant', image: '/images/cows/cow_calf_field-900x450.jpg', avgMilk: 0 },
-  // Sheep (6): 3 ewes (mothers), 1 ram, 2 lambs (young)
-  { id: 4, tag: 'KS001', name: 'Neema', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/GBZAMN3XwAA0jB-.jpg', avgMilk: 0 },
-  { id: 5, tag: 'KS002', name: 'Tumaini', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images.jpeg', avgMilk: 0 },
-  { id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images (1).jpeg', avgMilk: 0 },
-  { id: 7, tag: 'KS004', name: 'Simba', breed: 'Dorper', type: 'sheep', status: 'ram', image: '/images/sheeps/images2.jpeg', avgMilk: 0 },
-  { id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (2).jpeg', avgMilk: 0 },
-  { id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (3).jpeg', avgMilk: 0 },
+  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', type: 'cow', status: 'milking', image: '/images/cows/IMG-20240527-WA0009.jpg', avgMilk: 18.5, age: '4 years', weight: '450 kg', lastCalving: '2024-01-15', healthStatus: 'Excellent' },
+  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Holstein', type: 'cow', status: 'milking', image: '/images/cows/istockphoto-1072682504-612x612.jpg', avgMilk: 16.2, age: '3 years', weight: '420 kg', lastCalving: '2024-03-20', healthStatus: 'Good' },
+  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', type: 'cow', status: 'pregnant', image: '/images/cows/cow_calf_field-900x450.jpg', avgMilk: 0, age: '5 years', weight: '480 kg', dueDate: '2024-08-10', healthStatus: 'Excellent' },
+  // Sheep (6): 3 ewes (mothers), 1 ram, 2 lambs
+  { id: 4, tag: 'KS001', name: 'Neema', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/GBZAMN3XwAA0jB-.jpg', age: '3 years', weight: '55 kg', lambsProduced: 4, healthStatus: 'Excellent' },
+  { id: 5, tag: 'KS002', name: 'Tumaini', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images.jpeg', age: '2 years', weight: '48 kg', lambsProduced: 2, healthStatus: 'Good' },
+  { id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images (1).jpeg', age: '4 years', weight: '52 kg', lambsProduced: 6, healthStatus: 'Excellent' },
+  { id: 7, tag: 'KS004', name: 'Simba', breed: 'Dorper', type: 'sheep', status: 'ram', image: '/images/sheeps/images2.jpeg', age: '3 years', weight: '75 kg', healthStatus: 'Excellent' },
+  { id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (2).jpeg', age: '4 months', weight: '18 kg', healthStatus: 'Good' },
+  { id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (3).jpeg', age: '3 months', weight: '15 kg', healthStatus: 'Good' },
+];
+
+// Sales history for sheep
+const SHEEP_SALES_HISTORY = [
+  { date: '2024-06', count: 2, type: 'Lambs', revenue: 24000 },
+  { date: '2024-03', count: 1, type: 'Ram', revenue: 18000 },
+  { date: '2023-12', count: 3, type: 'Ewes', revenue: 36000 },
+  { date: '2023-09', count: 2, type: 'Lambs', revenue: 20000 },
 ];
 
 const FARM_STATS = {
@@ -25,18 +33,25 @@ const FARM_STATS = {
   totalSheep: 6,
   milkingCows: 2,
   dailyProduction: 34.7,
-  monthlyRevenue: 62460,
+  sheepSold: 8,
 };
+
+// Products available for order
+const PRODUCTS = [
+  { name: 'Fresh Milk', price: 'KES 60/L', icon: GiMilkCarton, description: 'Daily fresh milk from our healthy cows' },
+  { name: 'Mutton', price: 'KES 600/kg', icon: GiMeat, description: 'Quality Dorper sheep meat' },
+  { name: 'Live Sheep', price: 'From KES 8,000', icon: () => <span className="text-4xl">🐑</span>, description: 'Healthy Dorper sheep for breeding or meat' },
+  { name: 'Dairy Calves', price: 'From KES 25,000', icon: GiCow, description: 'Quality dairy breed calves' },
+];
 
 export default function PublicShowcase() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedAnimal, setSelectedAnimal] = useState<typeof SHOWCASE_ANIMALS[0] | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Background images - local farm images
   const farmImages = [
     '/images/cows/IMG-20240527-WA0009.jpg',
     '/images/cows/Richard 2_FIN.png',
-    '/images/cows/cow_calf_field-900x450.jpg',
-    '/images/cows/istockphoto-1072682504-612x612.jpg',
     '/images/sheeps/GBZAMN3XwAA0jB-.jpg',
   ];
 
@@ -49,9 +64,55 @@ export default function PublicShowcase() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Farm Background */}
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 bg-green-800/95 backdrop-blur z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-14 md:h-16">
+            <div className="flex items-center gap-2">
+              <GiCow className="text-2xl md:text-3xl text-green-300" />
+              <span className="font-bold text-white text-sm md:text-lg">Koimeret Dairies</span>
+            </div>
+
+            {/* Desktop Stats */}
+            <div className="hidden md:flex items-center gap-6 text-white text-sm">
+              <span>🐄 {FARM_STATS.totalCows} Cows</span>
+              <span>🐑 {FARM_STATS.totalSheep} Sheep</span>
+              <span>🥛 {FARM_STATS.dailyProduction}L/day</span>
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-4">
+              <a href="#herd" className="text-white hover:text-green-300 text-sm">Our Herd</a>
+              <a href="#products" className="text-white hover:text-green-300 text-sm">Products</a>
+              <a href="#contact" className="text-white hover:text-green-300 text-sm">Contact</a>
+              <Link href="/login" className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Farm Portal
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white p-2">
+              {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-green-700">
+              <div className="flex flex-col gap-3">
+                <a href="#herd" className="text-white hover:text-green-300" onClick={() => setMobileMenuOpen(false)}>Our Herd</a>
+                <a href="#products" className="text-white hover:text-green-300" onClick={() => setMobileMenuOpen(false)}>Products</a>
+                <a href="#contact" className="text-white hover:text-green-300" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+                <Link href="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg text-center">Farm Portal</Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Hero Section - Smaller */}
       <section
-        className="relative h-screen flex items-center justify-center"
+        className="relative h-[60vh] md:h-[70vh] flex items-center justify-center pt-14"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${farmImages[currentImageIndex]})`,
           backgroundSize: 'cover',
@@ -60,220 +121,283 @@ export default function PublicShowcase() {
         }}
       >
         <div className="text-center text-white z-10 px-4">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <GiCow className="text-6xl text-green-400" />
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-4">Koimeret Dairies</h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
-            Smart Dairy Farm Management System - Quality Milk Production in Chepalungu, Bomet, Kenya
+          <h1 className="text-3xl md:text-5xl font-bold mb-3">Koimeret Dairies</h1>
+          <p className="text-base md:text-xl text-gray-200 mb-6 max-w-xl mx-auto">
+            Quality Milk & Meat Production in Chepalungu, Bomet, Kenya
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/login"
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold flex items-center justify-center gap-2 transition-all"
-            >
-              Farm Portal <FiArrowRight />
-            </Link>
-            <a
-              href="#showcase"
-              className="bg-white/20 hover:bg-white/30 backdrop-blur text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all"
-            >
-              View Our Farm
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="#products" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+              <FiShoppingCart /> Order Products
             </a>
-          </div>
-        </div>
-
-        {/* Stats Bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur">
-          <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-5 gap-4 text-white text-center">
-            <div>
-              <GiCow className="text-3xl mx-auto mb-2 text-green-400" />
-              <p className="text-3xl font-bold">{FARM_STATS.totalCows}</p>
-              <p className="text-sm text-gray-300">Dairy Cows</p>
-            </div>
-            <div>
-              <span className="text-3xl mx-auto mb-2 block">🐑</span>
-              <p className="text-3xl font-bold">{FARM_STATS.totalSheep}</p>
-              <p className="text-sm text-gray-300">Sheep</p>
-            </div>
-            <div>
-              <FiDroplet className="text-3xl mx-auto mb-2 text-blue-400" />
-              <p className="text-3xl font-bold">{FARM_STATS.dailyProduction}L</p>
-              <p className="text-sm text-gray-300">Daily Milk</p>
-            </div>
-            <div>
-              <FiHeart className="text-3xl mx-auto mb-2 text-red-400" />
-              <p className="text-3xl font-bold">{FARM_STATS.milkingCows}</p>
-              <p className="text-sm text-gray-300">Milking Cows</p>
-            </div>
-            <div>
-              <FiBarChart2 className="text-3xl mx-auto mb-2 text-yellow-400" />
-              <p className="text-3xl font-bold">KES {(FARM_STATS.monthlyRevenue / 1000).toFixed(0)}K</p>
-              <p className="text-sm text-gray-300">Monthly Revenue</p>
-            </div>
+            <a href="#herd" className="bg-white/20 hover:bg-white/30 backdrop-blur text-white px-6 py-3 rounded-lg font-semibold">
+              View Our Herd
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Farm Showcase Section - Full Width */}
-      <section id="showcase" className="py-20 bg-gradient-to-b from-green-50 to-white">
-        <div className="px-4 md:px-8 lg:px-12">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Herd</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Meet our healthy, well-cared-for dairy cows. Each cow is individually tracked for milk production, health, and breeding.
-            </p>
+      {/* Our Herd Section */}
+      <section id="herd" className="py-12 md:py-16 bg-gradient-to-b from-green-50 to-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Our Herd</h2>
+            <p className="text-gray-600 text-sm md:text-base">Click on any animal to view details</p>
           </div>
 
-          {/* Animals Grid - Full Width */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-16">
+          {/* Animals Grid */}
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4">
             {SHOWCASE_ANIMALS.map((animal) => (
-              <div key={animal.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
-                <div className="h-48 overflow-hidden relative">
-                  <img
-                    src={animal.image}
-                    alt={animal.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-2 left-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium shadow-md ${
-                      animal.type === 'cow' ? 'bg-green-700 text-white' : 'bg-amber-600 text-white'
-                    }`}>
-                      {animal.type === 'cow' ? '🐄 Cow' : '🐑 Sheep'}
-                    </span>
-                  </div>
-                  <div className="absolute top-2 right-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium shadow-md ${
+              <div
+                key={animal.id}
+                onClick={() => setSelectedAnimal(animal)}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1"
+              >
+                <div className="h-24 md:h-32 overflow-hidden relative">
+                  <img src={animal.image} alt={animal.name} className="w-full h-full object-cover" />
+                  <div className="absolute top-1 right-1">
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium ${
                       animal.status === 'milking' ? 'bg-green-500 text-white' :
                       animal.status === 'pregnant' ? 'bg-blue-500 text-white' :
-                      animal.status === 'dry' ? 'bg-yellow-500 text-white' :
                       animal.status === 'ewe' ? 'bg-pink-500 text-white' :
                       animal.status === 'ram' ? 'bg-indigo-600 text-white' :
                       animal.status === 'lamb' ? 'bg-orange-400 text-white' :
-                      'bg-purple-500 text-white'
+                      'bg-gray-500 text-white'
                     }`}>
-                      {animal.status.charAt(0).toUpperCase() + animal.status.slice(1)}
+                      {animal.status}
                     </span>
                   </div>
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-bold text-gray-800">{animal.tag}</h3>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-2">{animal.name} - {animal.breed}</p>
-                  {animal.avgMilk > 0 && (
-                    <div className="flex items-center gap-2 text-blue-600 text-sm">
-                      <FiDroplet />
-                      <span className="font-medium">{animal.avgMilk} L/day avg</span>
-                    </div>
-                  )}
+                <div className="p-2">
+                  <p className="font-bold text-xs md:text-sm text-gray-800">{animal.tag}</p>
+                  <p className="text-gray-500 text-[10px] md:text-xs">{animal.name}</p>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Farm Features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-6 rounded-xl shadow text-center">
-              <GiMilkCarton className="text-5xl text-blue-500 mx-auto mb-4" />
-              <h3 className="font-bold text-gray-800 mb-2">Quality Milk</h3>
-              <p className="text-sm text-gray-600">Fresh, high-quality milk from healthy cows</p>
+      {/* Animal Detail Modal */}
+      {selectedAnimal && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setSelectedAnimal(null)}>
+          <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="relative">
+              <img src={selectedAnimal.image} alt={selectedAnimal.name} className="w-full h-48 object-cover" />
+              <button onClick={() => setSelectedAnimal(null)} className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full">
+                <FiX />
+              </button>
+              <div className="absolute bottom-2 left-2 flex gap-2">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${selectedAnimal.type === 'cow' ? 'bg-green-600' : 'bg-amber-600'} text-white`}>
+                  {selectedAnimal.type === 'cow' ? '🐄 Cow' : '🐑 Sheep'}
+                </span>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow text-center">
-              <GiWheat className="text-5xl text-yellow-500 mx-auto mb-4" />
-              <h3 className="font-bold text-gray-800 mb-2">Quality Feed</h3>
-              <p className="text-sm text-gray-600">Balanced nutrition with silage & concentrates</p>
+            <div className="p-4">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800">{selectedAnimal.name}</h3>
+                  <p className="text-gray-500">{selectedAnimal.tag} • {selectedAnimal.breed}</p>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  selectedAnimal.healthStatus === 'Excellent' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                }`}>
+                  {selectedAnimal.healthStatus}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <p className="text-gray-500">Age</p>
+                  <p className="font-semibold">{selectedAnimal.age}</p>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <p className="text-gray-500">Weight</p>
+                  <p className="font-semibold">{selectedAnimal.weight}</p>
+                </div>
+                {selectedAnimal.avgMilk > 0 && (
+                  <div className="bg-blue-50 p-3 rounded-lg col-span-2">
+                    <p className="text-blue-600">Daily Milk Production</p>
+                    <p className="font-semibold text-blue-800">{selectedAnimal.avgMilk} Liters/day</p>
+                  </div>
+                )}
+                {selectedAnimal.lambsProduced && (
+                  <div className="bg-pink-50 p-3 rounded-lg col-span-2">
+                    <p className="text-pink-600">Lambs Produced</p>
+                    <p className="font-semibold text-pink-800">{selectedAnimal.lambsProduced} lambs</p>
+                  </div>
+                )}
+                {selectedAnimal.dueDate && (
+                  <div className="bg-blue-50 p-3 rounded-lg col-span-2">
+                    <p className="text-blue-600">Expected Calving</p>
+                    <p className="font-semibold text-blue-800">{selectedAnimal.dueDate}</p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow text-center">
-              <FiHeart className="text-5xl text-red-500 mx-auto mb-4" />
-              <h3 className="font-bold text-gray-800 mb-2">Health Tracking</h3>
-              <p className="text-sm text-gray-600">Regular health checks & vaccinations</p>
+          </div>
+        </div>
+      )}
+
+      {/* Sheep Sales History */}
+      <section className="py-12 bg-amber-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Sheep & Meat Sales</h2>
+            <p className="text-gray-600 text-sm">Quality Dorper sheep available for purchase</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-xl p-6 shadow">
+              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <GiMeat className="text-red-500" /> Recent Sales
+              </h3>
+              <div className="space-y-3">
+                {SHEEP_SALES_HISTORY.map((sale, idx) => (
+                  <div key={idx} className="flex justify-between items-center border-b pb-2">
+                    <div>
+                      <p className="font-medium">{sale.count} {sale.type}</p>
+                      <p className="text-sm text-gray-500">{sale.date}</p>
+                    </div>
+                    <p className="text-green-600 font-semibold">KES {sale.revenue.toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-sm text-gray-500">Total sold: {FARM_STATS.sheepSold} sheep</p>
             </div>
-            <div className="bg-white p-6 rounded-xl shadow text-center">
-              <GiFarmTractor className="text-5xl text-green-500 mx-auto mb-4" />
-              <h3 className="font-bold text-gray-800 mb-2">Modern Farm</h3>
-              <p className="text-sm text-gray-600">4,775 m² with modern facilities</p>
+
+            <div className="bg-white rounded-xl p-6 shadow">
+              <h3 className="font-bold text-lg mb-4">Available Now</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                  <span>Mature Ewes</span>
+                  <span className="font-semibold text-green-700">KES 12,000 - 15,000</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                  <span>Breeding Ram</span>
+                  <span className="font-semibold text-green-700">KES 18,000 - 25,000</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                  <span>Lambs (3-6 months)</span>
+                  <span className="font-semibold text-green-700">KES 8,000 - 12,000</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                  <span>Mutton (per kg)</span>
+                  <span className="font-semibold text-red-700">KES 600/kg</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Farm Layout Section */}
-      <section className="py-20 bg-white">
-        <div className="px-4 md:px-8 lg:px-12">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Farm Layout</h2>
-            <p className="text-gray-600">Our well-planned dairy farm in Chepalungu, Bomet</p>
+      {/* Products Section */}
+      <section id="products" className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Our Products</h2>
+            <p className="text-gray-600 text-sm">Fresh from our farm to your table</p>
           </div>
 
-          <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div className="bg-white/80 p-4 rounded-lg">
-                <p className="text-2xl font-bold text-green-700">140 m²</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {PRODUCTS.map((product, idx) => (
+              <div key={idx} className="bg-green-50 rounded-xl p-4 text-center hover:shadow-lg transition">
+                <product.icon className="text-4xl text-green-600 mx-auto mb-3" />
+                <h3 className="font-bold text-gray-800">{product.name}</h3>
+                <p className="text-green-600 font-semibold text-sm">{product.price}</p>
+                <p className="text-xs text-gray-500 mt-1">{product.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Farm Layout with Image */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Our Farm</h2>
+            <p className="text-gray-600 text-sm">Chepalungu, Bomet County, Kenya</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div className="rounded-xl overflow-hidden shadow-lg">
+              <img src="/images/cows/Richard 2_FIN.png" alt="Koimeret Farm" className="w-full h-64 md:h-80 object-cover" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-lg shadow text-center">
+                <p className="text-2xl font-bold text-green-600">4,775 m²</p>
+                <p className="text-sm text-gray-600">Total Area</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg shadow text-center">
+                <p className="text-2xl font-bold text-green-600">140 m²</p>
                 <p className="text-sm text-gray-600">Cow Shed</p>
               </div>
-              <div className="bg-white/80 p-4 rounded-lg">
-                <p className="text-2xl font-bold text-green-700">120 m²</p>
-                <p className="text-sm text-gray-600">Feeding Area</p>
-              </div>
-              <div className="bg-white/80 p-4 rounded-lg">
-                <p className="text-2xl font-bold text-green-700">3,000 m²</p>
+              <div className="bg-white p-4 rounded-lg shadow text-center">
+                <p className="text-2xl font-bold text-green-600">3,000 m²</p>
                 <p className="text-sm text-gray-600">Fodder Field</p>
               </div>
-              <div className="bg-white/80 p-4 rounded-lg">
-                <p className="text-2xl font-bold text-green-700">150 m²</p>
+              <div className="bg-white p-4 rounded-lg shadow text-center">
+                <p className="text-2xl font-bold text-green-600">150 m²</p>
                 <p className="text-sm text-gray-600">Water Pan</p>
               </div>
             </div>
-            <div className="mt-6 text-center">
-              <p className="text-lg text-gray-700">
-                <strong>Total Area:</strong> 4,775 m² | <strong>Daily Production:</strong> 45-60 L
-              </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Features - Quality, Feed, Health */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4">
+              <GiMilkCarton className="text-3xl text-blue-500 mx-auto mb-2" />
+              <h3 className="font-semibold text-sm text-gray-800">Quality Milk</h3>
+              <p className="text-xs text-gray-500">Fresh daily</p>
+            </div>
+            <div className="text-center p-4">
+              <GiWheat className="text-3xl text-yellow-500 mx-auto mb-2" />
+              <h3 className="font-semibold text-sm text-gray-800">Quality Feed</h3>
+              <p className="text-xs text-gray-500">Balanced nutrition</p>
+            </div>
+            <div className="text-center p-4">
+              <FiHeart className="text-3xl text-red-500 mx-auto mb-2" />
+              <h3 className="font-semibold text-sm text-gray-800">Health Tracking</h3>
+              <p className="text-xs text-gray-500">Regular checkups</p>
+            </div>
+            <div className="text-center p-4">
+              <GiFarmTractor className="text-3xl text-green-500 mx-auto mb-2" />
+              <h3 className="font-semibold text-sm text-gray-800">Modern Farm</h3>
+              <p className="text-xs text-gray-500">Best practices</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact / CTA Section */}
-      <section
-        className="py-20 text-white"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,100,0,0.85), rgba(0,80,0,0.9)), url(https://images.unsplash.com/photo-1594761051656-c5917e299789?w=1920)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      {/* Contact CTA */}
+      <section id="contact" className="py-12 bg-green-700 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">Fresh Milk Daily</h2>
-          <p className="text-xl text-green-100 mb-8">
-            Contact us for bulk orders or regular supply. Quality milk from healthy cows, delivered fresh.
-          </p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">Order Fresh Milk & Meat</h2>
+          <p className="text-green-100 mb-6">Call us for orders, bulk supply, or farm visits</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+254700000000"
-              className="bg-white text-green-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-50 transition"
-            >
-              Call: 0700 000 000
+            <a href="tel:+254700000000" className="bg-white text-green-700 px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-green-50">
+              <FiPhone /> Call: 0700 000 000
             </a>
-            <Link
-              href="/login"
-              className="bg-green-500 hover:bg-green-400 px-8 py-4 rounded-lg text-lg font-semibold transition flex items-center justify-center gap-2"
-            >
-              <FiUsers /> Staff Portal
-            </Link>
+            <a href="https://wa.me/254700000000" className="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+              WhatsApp Order
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-8">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <GiCow className="text-2xl text-green-500" />
-            <span className="text-white font-bold">Koimeret Dairies</span>
+      {/* Footer - Compact */}
+      <footer className="bg-gray-900 text-gray-400 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-xs">
+          <div className="flex items-center gap-2 mb-2 md:mb-0">
+            <GiCow className="text-lg text-green-500" />
+            <span className="text-white font-medium">Koimeret Dairies</span>
+            <span className="text-gray-500">• Chepalungu, Bomet</span>
           </div>
-          <p className="text-sm">Chepalungu, Bomet, Kenya | Quality Dairy Farming</p>
-          <p className="text-xs mt-4">&copy; 2024 Koimeret Enterprise Dairy. Smart Farm Management System.</p>
+          <p>&copy; 2024 Koimeret Enterprise. Smart Dairy Farm.</p>
         </div>
       </footer>
     </div>
