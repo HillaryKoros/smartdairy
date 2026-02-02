@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h2>Smart Dairy Farm Management</h2>
+        <p>Manage your dairy farm efficiently with our comprehensive system for milk production tracking, feed management, health records, and more.</p>
+        <a href="/admin/" class="btn">Admin Dashboard</a>
+        <a href="/api/v1/" class="btn">API Documentation</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature">
+        <h3>🥛 Milk Production</h3>
+        <p>Track daily milk production per cow, monitor yields, and identify trends.</p>
+    </div>
+    <div class="feature">
+        <h3>🌾 Feed Management</h3>
+        <p>Manage feed inventory, track usage, and get low stock alerts.</p>
+    </div>
+    <div class="feature">
+        <h3>💊 Health & Vaccination</h3>
+        <p>Record health events, treatments, and vaccination schedules.</p>
+    </div>
+    <div class="feature">
+        <h3>✅ Task Management</h3>
+        <p>Assign daily tasks to workers and track completion.</p>
+    </div>
+    <div class="feature">
+        <h3>💰 Sales & Finance</h3>
+        <p>Record milk sales, manage buyers, and track payments.</p>
+    </div>
+    <div class="feature">
+        <h3>🔔 Smart Alerts</h3>
+        <p>Get notified about low stock, vaccines due, and missed tasks.</p>
+    </div>
+</section>
+{% endblock %}

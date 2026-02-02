@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Koimeret Dairies{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a5f2a 0%, #2d8a3e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        header {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            color: white;
+        }
+        header h1 {
+            font-size: 2em;
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: white;
+            color: #1a5f2a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+        }
+        .feature {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .feature h3 {
+            color: #1a5f2a;
+            margin-bottom: 15px;
+        }
+        .feature p {
+            color: #666;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🐄 Koimeret Dairies</h1>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>&copy; 2024 Koimeret Dairies. Smart Dairy Farm Management.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

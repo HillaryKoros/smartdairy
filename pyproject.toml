@@ -1,0 +1,70 @@
+[project]
+name = "smartdairy"
+version = "1.0.0"
+description = "SmartDairy - Dairy Farm Management System with Wagtail CMS"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Django & Wagtail
+    "django>=4.2,<5.0",
+    "wagtail>=6.3,<7.0",
+    "wagtail-localize>=1.9",
+    "wagtail-metadata>=5.0",
+    "wagtail-cache>=2.0",
+    "wagtail-font-awesome-svg>=0.1",
+    "wagtail-color-panel>=1.4",
+
+    # Django extensions
+    "djangorestframework>=3.14",
+    "django-environ>=0.11",
+    "django-cors-headers>=4.3",
+    "django-cleanup>=8.0",
+    "django-extensions>=3.2",
+    "django-filter>=24.0",
+
+    # Database
+    "psycopg[binary]>=3.1",
+
+    # Caching
+    "pymemcache>=4.0",
+    "django-redis>=5.4",
+
+    # Server
+    "gunicorn>=21.0",
+    "whitenoise>=6.6",
+    "uvicorn>=0.24",
+    "channels>=4.0",
+    "daphne>=4.0",
+
+    # Utils
+    "pillow>=10.0",
+    "weasyprint>=60.0",
+    "qrcode>=7.4",
+    "python-barcode>=0.15",
+    "celery>=5.3",
+    "redis>=5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-django>=4.5",
+    "black>=23.0",
+    "ruff>=0.1",
+    "django-debug-toolbar>=4.2",
+    "factory-boy>=3.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 120
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
