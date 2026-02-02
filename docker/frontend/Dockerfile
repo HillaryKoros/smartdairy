@@ -5,8 +5,9 @@ RUN apk add --no-cache libc6-compat
 # Install dependencies
 FROM base AS deps
 WORKDIR /app
-COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm ci || npm install
+COPY frontend/package.json ./
+# Don't use package-lock.json to avoid SWC binary mismatch
+RUN npm install
 
 # Development image
 FROM base AS development
