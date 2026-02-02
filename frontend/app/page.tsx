@@ -5,20 +5,27 @@ import Link from 'next/link';
 import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat } from 'react-icons/gi';
 import { FiDroplet, FiHeart, FiUsers, FiBarChart2, FiArrowRight } from 'react-icons/fi';
 
-// Farm showcase data (public, no auth needed)
+// Farm showcase data (public, no auth needed) - Expanded herd
 const SHOWCASE_COWS = [
   { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?w=400', avgMilk: 18.5 },
   { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400', avgMilk: 16.2 },
   { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', status: 'milking', image: 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400', avgMilk: 14.8 },
   { id: 4, tag: 'KD004', name: 'Neema', breed: 'Jersey', status: 'pregnant', image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400', avgMilk: 12.5 },
   { id: 5, tag: 'KD005', name: 'Tumaini', breed: 'Friesian', status: 'heifer', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400', avgMilk: 0 },
+  { id: 6, tag: 'KD006', name: 'Faraja', breed: 'Holstein', status: 'milking', image: 'https://images.unsplash.com/photo-1572806903587-4a8a82e7d095?w=400', avgMilk: 17.3 },
+  { id: 7, tag: 'KD007', name: 'Amani', breed: 'Guernsey', status: 'milking', image: 'https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=400', avgMilk: 15.1 },
+  { id: 8, tag: 'KD008', name: 'Upendo', breed: 'Friesian', status: 'dry', image: 'https://images.unsplash.com/photo-1595365691689-6b7b4e1970cf?w=400', avgMilk: 0 },
+  { id: 9, tag: 'KD009', name: 'Imani', breed: 'Ayrshire', status: 'milking', image: 'https://images.unsplash.com/photo-1605152276897-4f618f831968?w=400', avgMilk: 13.9 },
+  { id: 10, tag: 'KD010', name: 'Rehema', breed: 'Jersey', status: 'pregnant', image: 'https://images.unsplash.com/photo-1563281746-48bb478e9b2a?w=400', avgMilk: 11.8 },
+  { id: 11, tag: 'KD011', name: 'Salama', breed: 'Friesian', status: 'milking', image: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?w=400', avgMilk: 16.7 },
+  { id: 12, tag: 'KD012', name: 'Bahati', breed: 'Holstein', status: 'heifer', image: 'https://images.unsplash.com/photo-1598207079590-a85cc7c30899?w=400', avgMilk: 0 },
 ];
 
 const FARM_STATS = {
-  totalCows: 5,
-  milkingCows: 3,
-  dailyProduction: 49.5,
-  monthlyRevenue: 89100,
+  totalCows: 12,
+  milkingCows: 7,
+  dailyProduction: 112.5,
+  monthlyRevenue: 202500,
 };
 
 export default function PublicShowcase() {
@@ -28,6 +35,9 @@ export default function PublicShowcase() {
     'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920',
     'https://images.unsplash.com/photo-1594761051656-c5917e299789?w=1920',
     'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=1920',
+    'https://images.unsplash.com/photo-1605152276897-4f618f831968?w=1920',
+    'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1920',
+    'https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=1920',
   ];
 
   useEffect(() => {
@@ -110,31 +120,34 @@ export default function PublicShowcase() {
             </p>
           </div>
 
-          {/* Cows Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {/* Cows Grid - Expanded */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
             {SHOWCASE_COWS.map((cow) => (
-              <div key={cow.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="h-48 overflow-hidden">
+              <div key={cow.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
+                <div className="h-48 overflow-hidden relative">
                   <img
                     src={cow.image}
                     alt={cow.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-gray-800">{cow.tag}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      cow.status === 'milking' ? 'bg-green-100 text-green-800' :
-                      cow.status === 'pregnant' ? 'bg-blue-100 text-blue-800' :
-                      'bg-purple-100 text-purple-800'
+                  <div className="absolute top-2 right-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium shadow-md ${
+                      cow.status === 'milking' ? 'bg-green-500 text-white' :
+                      cow.status === 'pregnant' ? 'bg-blue-500 text-white' :
+                      cow.status === 'dry' ? 'bg-yellow-500 text-white' :
+                      'bg-purple-500 text-white'
                     }`}>
                       {cow.status.charAt(0).toUpperCase() + cow.status.slice(1)}
                     </span>
                   </div>
-                  <p className="text-gray-600 mb-2">{cow.name} - {cow.breed}</p>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-lg font-bold text-gray-800">{cow.tag}</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-2">{cow.name} - {cow.breed}</p>
                   {cow.avgMilk > 0 && (
-                    <div className="flex items-center gap-2 text-blue-600">
+                    <div className="flex items-center gap-2 text-blue-600 text-sm">
                       <FiDroplet />
                       <span className="font-medium">{cow.avgMilk} L/day avg</span>
                     </div>
