@@ -49,10 +49,14 @@ export default function PublicShowcase() {
   const [selectedAnimal, setSelectedAnimal] = useState<typeof SHOWCASE_ANIMALS[0] | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Hero background images - farm scenes
   const farmImages = [
     '/images/cows/IMG-20240527-WA0009.jpg',
     '/images/cows/Richard 2_FIN.png',
+    '/images/maize/Silage-on-maize-green-stems-unripe-on-field_Getty-Images-Large.jpeg',
+    '/images/maize/header-1900-800-px-1-848x600.jpg',
     '/images/sheeps/GBZAMN3XwAA0jB-.jpg',
+    '/images/maize/sustainables.jpg',
   ];
 
   useEffect(() => {
