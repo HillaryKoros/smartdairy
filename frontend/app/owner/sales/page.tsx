@@ -689,7 +689,7 @@ export default function SalesPage() {
                         <tr key={idx} className="border-b border-gray-100">
                           <td className="py-3 px-2 text-sm text-gray-800">{formatDate(sale.date)}</td>
                           <td className="py-3 px-2 text-sm">
-                            <Badge variant={sale.type === 'Lambs' ? 'info' : sale.type === 'Ram' ? 'primary' : 'warning'}>
+                            <Badge variant={sale.type === 'Lambs' ? 'info' : sale.type === 'Ram' ? 'secondary' : 'warning'}>
                               {sale.type}
                             </Badge>
                           </td>
