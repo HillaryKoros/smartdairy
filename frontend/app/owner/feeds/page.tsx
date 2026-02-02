@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiPlus, FiPackage, FiAlertTriangle, FiTruck, FiTrendingDown } from 'react-icons/fi';
+import { FiPlus, FiPackage, FiAlertTriangle, FiTruck, FiTrendingDown, FiBarChart2, FiCalendar, FiDollarSign } from 'react-icons/fi';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { Button } from '@/components/Button';
@@ -40,6 +40,37 @@ interface FeedPurchase {
   date: string;
 }
 
+// Static yearly analytics data
+const YEARLY_STATS = {
+  totalSpending: 145000,
+  avgMonthlySpending: 12083,
+  topSupplier: 'Bomet Agrovet',
+  topItem: 'Dairy Meal',
+  purchaseCount: 48,
+};
+
+const MONTHLY_SPENDING = [
+  { month: 'Jan', amount: 12500 },
+  { month: 'Feb', amount: 11200 },
+  { month: 'Mar', amount: 13800 },
+  { month: 'Apr', amount: 12000 },
+  { month: 'May', amount: 14500 },
+  { month: 'Jun', amount: 11800 },
+  { month: 'Jul', amount: 13200 },
+  { month: 'Aug', amount: 12800 },
+  { month: 'Sep', amount: 11500 },
+  { month: 'Oct', amount: 10200 },
+  { month: 'Nov', amount: 10800 },
+  { month: 'Dec', amount: 10700 },
+];
+
+const CATEGORY_BREAKDOWN = [
+  { category: 'Fodder', amount: 58000, percentage: 40 },
+  { category: 'Concentrate', amount: 52200, percentage: 36 },
+  { category: 'Mineral', amount: 21750, percentage: 15 },
+  { category: 'Supplement', amount: 13050, percentage: 9 },
+];
+
 const CATEGORIES = [
   { value: 'fodder', label: 'Fodder' },
   { value: 'concentrate', label: 'Concentrate' },
@@ -61,6 +92,7 @@ export default function FeedsInventoryPage() {
   const [showItemModal, setShowItemModal] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'inventory' | 'purchases'>('overview');
 
   const itemForm = useForm({
     defaultValues: {
@@ -142,6 +174,7 @@ export default function FeedsInventoryPage() {
 
   const lowStockItems = feedItems.filter(item => item.current_stock?.is_low);
   const totalValue = purchases.reduce((sum, p) => sum + p.total_cost, 0);
+  const maxMonthly = Math.max(...MONTHLY_SPENDING.map(m => m.amount));
 
   if (loading) return <Layout role="owner"><PageLoading /></Layout>;
 
@@ -149,10 +182,10 @@ export default function FeedsInventoryPage() {
     <Layout role="owner">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Feeds & Inventory</h1>
-            <p className="text-gray-500">Manage feed stock and purchases</p>
+            <p className="text-gray-500">Inventory management and spending analytics</p>
           </div>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => setShowItemModal(true)}>
@@ -162,6 +195,23 @@ export default function FeedsInventoryPage() {
               <FiTruck className="mr-2" /> Record Purchase
             </Button>
           </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 border-b">
+          {['overview', 'inventory', 'purchases'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`px-4 py-2 font-medium capitalize transition-colors ${
+                activeTab === tab
+                  ? 'text-primary-600 border-b-2 border-primary-600'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* Low Stock Alert */}
@@ -181,146 +231,232 @@ export default function FeedsInventoryPage() {
           </Card>
         )}
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <FiPackage className="text-2xl text-green-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Total Items</p>
-                  <p className="text-2xl font-bold text-gray-800">{feedItems.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                  <FiTrendingDown className="text-2xl text-red-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Low Stock</p>
-                  <p className="text-2xl font-bold text-gray-800">{lowStockItems.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FiTruck className="text-2xl text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Purchases (MTD)</p>
-                  <p className="text-2xl font-bold text-gray-800">KES {formatNumber(totalValue)}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Inventory Grid */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Current Inventory</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {feedItems.length === 0 ? (
-              <div className="text-center py-8">
-                <FiPackage className="text-5xl text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No feed items configured</p>
-                <Button variant="outline" className="mt-4" onClick={() => setShowItemModal(true)}>
-                  Add First Item
-                </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {feedItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`p-4 rounded-lg border ${
-                      item.current_stock?.is_low ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="font-medium text-gray-800">{item.name}</h3>
-                        <p className="text-sm text-gray-500">{item.category_display}</p>
-                      </div>
-                      {item.current_stock?.is_low && (
-                        <Badge variant="danger">Low</Badge>
-                      )}
+        {activeTab === 'overview' && (
+          <>
+            {/* Yearly Summary */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                      <FiDollarSign className="text-2xl text-red-600" />
                     </div>
-                    <div className="mt-3 space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Current Stock:</span>
-                        <span className="font-medium text-gray-800">
-                          {item.current_stock?.quantity || 0} {item.unit}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Min Stock:</span>
-                        <span className="text-gray-600">{item.minimum_stock} {item.unit}</span>
-                      </div>
-                      {item.current_stock?.days_remaining !== null && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Days Left:</span>
-                          <span className={item.current_stock!.days_remaining < 7 ? 'text-red-600 font-medium' : 'text-gray-600'}>
-                            ~{item.current_stock!.days_remaining} days
-                          </span>
-                        </div>
-                      )}
+                    <div>
+                      <p className="text-sm text-gray-500">Total Spending (YTD)</p>
+                      <p className="text-xl font-bold text-gray-800">KES {formatNumber(YEARLY_STATS.totalSpending)}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FiCalendar className="text-2xl text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Monthly Average</p>
+                      <p className="text-xl font-bold text-gray-800">KES {formatNumber(YEARLY_STATS.avgMonthlySpending)}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                      <FiPackage className="text-2xl text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Total Items</p>
+                      <p className="text-xl font-bold text-gray-800">{feedItems.length}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                      <FiTrendingDown className="text-2xl text-amber-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Low Stock</p>
+                      <p className="text-xl font-bold text-gray-800">{lowStockItems.length}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-        {/* Recent Purchases */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Purchases</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {purchases.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No purchases recorded</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Date</th>
-                      <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Item</th>
-                      <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Qty</th>
-                      <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Unit Price</th>
-                      <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Total</th>
-                      <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Supplier</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {purchases.slice(0, 10).map((purchase) => (
-                      <tr key={purchase.id} className="border-b border-gray-100">
-                        <td className="py-3 px-2 text-sm text-gray-800">{formatDate(purchase.date)}</td>
-                        <td className="py-3 px-2 text-sm text-gray-800">{purchase.feed_item_name}</td>
-                        <td className="py-3 px-2 text-sm text-right text-gray-600">{purchase.quantity} {purchase.unit}</td>
-                        <td className="py-3 px-2 text-sm text-right text-gray-600">KES {formatNumber(purchase.unit_price)}</td>
-                        <td className="py-3 px-2 text-sm text-right font-medium text-gray-800">KES {formatNumber(purchase.total_cost)}</td>
-                        <td className="py-3 px-2 text-sm text-gray-600">{purchase.supplier || '-'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            {/* Monthly Spending Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FiBarChart2 className="text-primary-500" /> Monthly Feed Spending (2024)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-end gap-2 h-40">
+                  {MONTHLY_SPENDING.map((month, idx) => (
+                    <div key={idx} className="flex-1 flex flex-col items-center">
+                      <div
+                        className="w-full bg-red-500 rounded-t hover:bg-red-600 transition-colors"
+                        style={{ height: `${(month.amount / maxMonthly) * 100}%` }}
+                        title={`${month.month}: KES ${formatNumber(month.amount)}`}
+                      />
+                      <span className="text-xs text-gray-500 mt-1">{month.month.slice(0, 3)}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Category Breakdown */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Spending by Category (YTD)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {CATEGORY_BREAKDOWN.map((cat, idx) => (
+                    <div key={idx}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="font-medium text-gray-700">{cat.category}</span>
+                        <span className="text-gray-600">KES {formatNumber(cat.amount)} ({cat.percentage}%)</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className={`h-3 rounded-full ${
+                            idx === 0 ? 'bg-green-500' :
+                            idx === 1 ? 'bg-blue-500' :
+                            idx === 2 ? 'bg-amber-500' : 'bg-purple-500'
+                          }`}
+                          style={{ width: `${cat.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 pt-4 border-t">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-500">Top Supplier</p>
+                      <p className="font-bold text-gray-800">{YEARLY_STATS.topSupplier}</p>
+                    </div>
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-500">Top Item</p>
+                      <p className="font-bold text-gray-800">{YEARLY_STATS.topItem}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'inventory' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Inventory</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {feedItems.length === 0 ? (
+                <div className="text-center py-8">
+                  <FiPackage className="text-5xl text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No feed items configured</p>
+                  <Button variant="outline" className="mt-4" onClick={() => setShowItemModal(true)}>
+                    Add First Item
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {feedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`p-4 rounded-lg border ${
+                        item.current_stock?.is_low ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="font-medium text-gray-800">{item.name}</h3>
+                          <p className="text-sm text-gray-500">{item.category_display}</p>
+                        </div>
+                        {item.current_stock?.is_low && (
+                          <Badge variant="danger">Low</Badge>
+                        )}
+                      </div>
+                      <div className="mt-3 space-y-1">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Current Stock:</span>
+                          <span className="font-medium text-gray-800">
+                            {item.current_stock?.quantity || 0} {item.unit}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Min Stock:</span>
+                          <span className="text-gray-600">{item.minimum_stock} {item.unit}</span>
+                        </div>
+                        {item.current_stock?.days_remaining !== null && item.current_stock?.days_remaining !== undefined && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Days Left:</span>
+                            <span className={item.current_stock!.days_remaining < 7 ? 'text-red-600 font-medium' : 'text-gray-600'}>
+                              ~{item.current_stock!.days_remaining} days
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === 'purchases' && (
+          <Card>
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle>Purchase History</CardTitle>
+                <p className="text-sm text-gray-500">{purchases.length} purchases recorded</p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent>
+              {purchases.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">No purchases recorded</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Date</th>
+                        <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Item</th>
+                        <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Qty</th>
+                        <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Unit Price</th>
+                        <th className="text-right py-3 px-2 text-sm font-medium text-gray-500">Total</th>
+                        <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Supplier</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {purchases.map((purchase) => (
+                        <tr key={purchase.id} className="border-b border-gray-100">
+                          <td className="py-3 px-2 text-sm text-gray-800">{formatDate(purchase.date)}</td>
+                          <td className="py-3 px-2 text-sm text-gray-800">{purchase.feed_item_name}</td>
+                          <td className="py-3 px-2 text-sm text-right text-gray-600">{purchase.quantity} {purchase.unit}</td>
+                          <td className="py-3 px-2 text-sm text-right text-gray-600">KES {formatNumber(purchase.unit_price)}</td>
+                          <td className="py-3 px-2 text-sm text-right font-medium text-gray-800">KES {formatNumber(purchase.total_cost)}</td>
+                          <td className="py-3 px-2 text-sm text-gray-600">{purchase.supplier || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Add Item Modal */}
         <Modal isOpen={showItemModal} onClose={() => setShowItemModal(false)} title="Add Feed Item">

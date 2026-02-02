@@ -7,7 +7,7 @@ import {
   FiHome, FiUsers, FiDroplet, FiPackage, FiHeart, FiCheckSquare,
   FiDollarSign, FiBell, FiMenu, FiX, FiLogOut, FiUser
 } from 'react-icons/fi';
-import { GiCow } from 'react-icons/gi';
+import { GiCow, GiSheep } from 'react-icons/gi';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
 
@@ -22,6 +22,7 @@ const workerNavItems = [
 const ownerNavItems = [
   { href: '/owner', label: 'Dashboard', icon: FiHome },
   { href: '/owner/cows', label: 'Cows', icon: GiCow },
+  { href: '/owner/sheep', label: 'Sheep', icon: GiSheep },
   { href: '/owner/milk', label: 'Production', icon: FiDroplet },
   { href: '/owner/feeds', label: 'Inventory', icon: FiPackage },
   { href: '/owner/health', label: 'Health', icon: FiHeart },
