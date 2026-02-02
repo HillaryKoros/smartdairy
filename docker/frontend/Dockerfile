@@ -33,6 +33,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ .
 
 ENV NEXT_TELEMETRY_DISABLED=1
+# Set API URL for production build (relative URL goes through nginx)
+ENV NEXT_PUBLIC_API_URL=/api/v1
 RUN npm run build
 
 # Production image
