@@ -5,19 +5,19 @@ import Link from 'next/link';
 import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat } from 'react-icons/gi';
 import { FiDroplet, FiHeart, FiUsers, FiBarChart2, FiArrowRight } from 'react-icons/fi';
 
-// Farm showcase data - 3 Cows and 6 Sheep
+// Farm showcase data - 3 Cows and 6 Sheep (using local images)
 const SHOWCASE_ANIMALS = [
   // Cows (3): 2 milking, 1 pregnant
-  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', type: 'cow', status: 'milking', image: 'https://cdn.pixabay.com/photo/2016/10/11/13/29/cow-1731377_640.jpg', avgMilk: 18.5 },
-  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Holstein', type: 'cow', status: 'milking', image: 'https://cdn.pixabay.com/photo/2017/11/08/15/16/cow-2930581_640.jpg', avgMilk: 16.2 },
-  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', type: 'cow', status: 'pregnant', image: 'https://cdn.pixabay.com/photo/2013/10/09/02/27/cow-192983_640.jpg', avgMilk: 0 },
+  { id: 1, tag: 'KD001', name: 'Malkia', breed: 'Friesian', type: 'cow', status: 'milking', image: '/images/cows/IMG-20240527-WA0009.jpg', avgMilk: 18.5 },
+  { id: 2, tag: 'KD002', name: 'Zawadi', breed: 'Holstein', type: 'cow', status: 'milking', image: '/images/cows/istockphoto-1072682504-612x612.jpg', avgMilk: 16.2 },
+  { id: 3, tag: 'KD003', name: 'Baraka', breed: 'Ayrshire', type: 'cow', status: 'pregnant', image: '/images/cows/cow_calf_field-900x450.jpg', avgMilk: 0 },
   // Sheep (6): 3 ewes (mothers), 1 ram, 2 lambs (young)
-  { id: 4, tag: 'KS001', name: 'Neema', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2018/07/25/08/58/sheep-3560872_640.jpg', avgMilk: 0 },
-  { id: 5, tag: 'KS002', name: 'Tumaini', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2016/11/29/04/19/sheep-1867441_640.jpg', avgMilk: 0 },
-  { id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe', image: 'https://cdn.pixabay.com/photo/2019/07/22/09/24/sheep-4354153_640.jpg', avgMilk: 0 },
-  { id: 7, tag: 'KS004', name: 'Simba', breed: 'Dorper', type: 'sheep', status: 'ram', image: 'https://cdn.pixabay.com/photo/2018/04/17/18/03/sheep-3327684_640.jpg', avgMilk: 0 },
-  { id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: 'https://cdn.pixabay.com/photo/2017/06/25/07/03/lamb-2441023_640.jpg', avgMilk: 0 },
-  { id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: 'https://cdn.pixabay.com/photo/2016/03/27/21/16/sheep-1284093_640.jpg', avgMilk: 0 },
+  { id: 4, tag: 'KS001', name: 'Neema', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/GBZAMN3XwAA0jB-.jpg', avgMilk: 0 },
+  { id: 5, tag: 'KS002', name: 'Tumaini', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images.jpeg', avgMilk: 0 },
+  { id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe', image: '/images/sheeps/images (1).jpeg', avgMilk: 0 },
+  { id: 7, tag: 'KS004', name: 'Simba', breed: 'Dorper', type: 'sheep', status: 'ram', image: '/images/sheeps/images2.jpeg', avgMilk: 0 },
+  { id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (2).jpeg', avgMilk: 0 },
+  { id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb', image: '/images/sheeps/images (3).jpeg', avgMilk: 0 },
 ];
 
 const FARM_STATS = {
@@ -31,14 +31,13 @@ const FARM_STATS = {
 export default function PublicShowcase() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Background images - verified cow/dairy farm images
+  // Background images - local farm images
   const farmImages = [
-    'https://cdn.pixabay.com/photo/2017/04/03/08/47/cow-2197954_1280.jpg',
-    'https://cdn.pixabay.com/photo/2016/10/11/13/29/cow-1731377_1280.jpg',
-    'https://cdn.pixabay.com/photo/2015/05/04/10/03/cow-752458_1280.jpg',
-    'https://cdn.pixabay.com/photo/2017/11/08/15/16/cow-2930581_1280.jpg',
-    'https://cdn.pixabay.com/photo/2019/07/17/15/27/calf-4344336_1280.jpg',
-    'https://cdn.pixabay.com/photo/2016/07/11/15/09/cow-1509258_1280.jpg',
+    '/images/cows/IMG-20240527-WA0009.jpg',
+    '/images/cows/Richard 2_FIN.png',
+    '/images/cows/cow_calf_field-900x450.jpg',
+    '/images/cows/istockphoto-1072682504-612x612.jpg',
+    '/images/sheeps/GBZAMN3XwAA0jB-.jpg',
   ];
 
   useEffect(() => {
