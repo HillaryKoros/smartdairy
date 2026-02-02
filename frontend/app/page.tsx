@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat, GiMeat, GiSheep } from 'react-icons/gi';
+import { GiCow, GiFarmTractor, GiMilkCarton, GiWheat, GiMeat, GiSheep, GiChicken } from 'react-icons/gi';
 import { FiDroplet, FiHeart, FiPhone, FiShoppingCart, FiX, FiMenu, FiCalendar, FiActivity } from 'react-icons/fi';
 
 // Animal data with detailed characteristics
@@ -41,7 +41,7 @@ const SHOWCASE_ANIMALS = [
   },
   {
     id: 6, tag: 'KS003', name: 'Faraja', breed: 'Dorper', type: 'sheep', status: 'ewe',
-    image: '/images/sheeps/images (1).jpeg', age: '4 years', weight: '52 kg', lambsProduced: 6,
+    image: '/images/sheeps/sheep1.jpeg', age: '4 years', weight: '52 kg', lambsProduced: 6,
     healthStatus: 'Excellent', color: 'White with black head',
     description: 'Seasoned mother with consistent twin births.'
   },
@@ -53,21 +53,83 @@ const SHOWCASE_ANIMALS = [
   },
   {
     id: 8, tag: 'KS005', name: 'Kidogo', breed: 'Dorper', type: 'sheep', status: 'lamb',
-    image: '/images/sheeps/images (2).jpeg', age: '4 months', weight: '18 kg',
+    image: '/images/sheeps/sheep2.jpeg', age: '4 months', weight: '18 kg',
     healthStatus: 'Good', color: 'White with black markings',
     description: 'Growing lamb from Neema, healthy and active.'
   },
   {
     id: 9, tag: 'KS006', name: 'Mdogo', breed: 'Dorper', type: 'sheep', status: 'lamb',
-    image: '/images/sheeps/images (3).jpeg', age: '3 months', weight: '15 kg',
+    image: '/images/sheeps/sheep3.jpeg', age: '3 months', weight: '15 kg',
     healthStatus: 'Good', color: 'White with black markings',
     description: 'Youngest lamb, twin from Faraja.'
+  },
+  // Chickens (10): 2 cockerels, 4 layers, 4 chicks
+  {
+    id: 10, tag: 'KC001', name: 'Jogoo', breed: 'Kienyeji', type: 'chicken', status: 'cockerel',
+    image: '/images/chickens/cockerel1.jpg', age: '1 year', weight: '3.5 kg',
+    healthStatus: 'Excellent', color: 'Multi-colored',
+    description: 'Strong rooster, leader of the flock with beautiful plumage.'
+  },
+  {
+    id: 11, tag: 'KC002', name: 'Koikoi', breed: 'Kienyeji', type: 'chicken', status: 'cockerel',
+    image: '/images/chickens/chicken1.jpg', age: '10 months', weight: '3.2 kg',
+    healthStatus: 'Good', color: 'Brown & Red',
+    description: 'Young cockerel with good breeding potential.'
+  },
+  {
+    id: 12, tag: 'KC003', name: 'Mama Yai', breed: 'Kienyeji', type: 'chicken', status: 'layer',
+    image: '/images/chickens/chicken2.jpeg', age: '1.5 years', weight: '2.5 kg', eggsPerWeek: 5,
+    healthStatus: 'Excellent', color: 'Brown',
+    description: 'Top egg producer, consistent and healthy.'
+  },
+  {
+    id: 13, tag: 'KC004', name: 'Njano', breed: 'Kienyeji', type: 'chicken', status: 'layer',
+    image: '/images/chickens/chicken3.jpeg', age: '1 year', weight: '2.3 kg', eggsPerWeek: 4,
+    healthStatus: 'Good', color: 'Golden Brown',
+    description: 'Reliable layer with calm temperament.'
+  },
+  {
+    id: 14, tag: 'KC005', name: 'Kuku Mama', breed: 'Kienyeji', type: 'chicken', status: 'layer',
+    image: '/images/chickens/chicken4.jpeg', age: '2 years', weight: '2.8 kg', eggsPerWeek: 4,
+    healthStatus: 'Excellent', color: 'Speckled',
+    description: 'Experienced layer and good mother hen.'
+  },
+  {
+    id: 15, tag: 'KC006', name: 'Cheusi', breed: 'Kienyeji', type: 'chicken', status: 'layer',
+    image: '/images/chickens/chicken5.jpeg', age: '1.5 years', weight: '2.4 kg', eggsPerWeek: 5,
+    healthStatus: 'Good', color: 'Black',
+    description: 'Dark feathered hen, excellent forager.'
+  },
+  {
+    id: 16, tag: 'KC007', name: 'Kifaranga 1', breed: 'Kienyeji', type: 'chicken', status: 'chick',
+    image: '/images/chickens/chicken6.jpeg', age: '6 weeks', weight: '0.3 kg',
+    healthStatus: 'Good', color: 'Yellow & Brown',
+    description: 'Growing chick, healthy and active.'
+  },
+  {
+    id: 17, tag: 'KC008', name: 'Kifaranga 2', breed: 'Kienyeji', type: 'chicken', status: 'chick',
+    image: '/images/chickens/chicken7.jpeg', age: '6 weeks', weight: '0.3 kg',
+    healthStatus: 'Good', color: 'Brown',
+    description: 'Playful chick from Mama Yai.'
+  },
+  {
+    id: 18, tag: 'KC009', name: 'Kifaranga 3', breed: 'Kienyeji', type: 'chicken', status: 'chick',
+    image: '/images/chickens/chicken8.jpeg', age: '4 weeks', weight: '0.2 kg',
+    healthStatus: 'Good', color: 'Mixed',
+    description: 'Youngest of the batch, very curious.'
+  },
+  {
+    id: 19, tag: 'KC010', name: 'Kifaranga 4', breed: 'Kienyeji', type: 'chicken', status: 'chick',
+    image: '/images/chickens/chickens-group.jpg', age: '5 weeks', weight: '0.25 kg',
+    healthStatus: 'Good', color: 'Speckled',
+    description: 'Growing well with the flock.'
   },
 ];
 
 const FARM_STATS = {
   totalCows: 3,
   totalSheep: 6,
+  totalChickens: 10,
   milkingCows: 2,
   dailyProduction: 34.7,
   sheepSold: 8,
@@ -76,7 +138,9 @@ const FARM_STATS = {
 // Products available for order
 const PRODUCTS = [
   { name: 'Fresh Milk', price: 'KES 60/L', icon: GiMilkCarton, description: 'Daily fresh milk from our healthy cows' },
+  { name: 'Fresh Eggs', price: 'KES 15/egg', icon: GiChicken, description: 'Farm-fresh free-range eggs' },
   { name: 'Mutton', price: 'KES 600/kg', icon: GiMeat, description: 'Quality Dorper sheep meat' },
+  { name: 'Live Chickens', price: 'From KES 800', icon: GiChicken, description: 'Healthy Kienyeji chickens' },
   { name: 'Live Sheep', price: 'From KES 8,000', icon: GiSheep, description: 'Healthy Dorper sheep for breeding or meat' },
   { name: 'Dairy Calves', price: 'From KES 25,000', icon: GiCow, description: 'Quality dairy breed calves' },
 ];
@@ -85,12 +149,12 @@ export default function PublicShowcase() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedAnimal, setSelectedAnimal] = useState<typeof SHOWCASE_ANIMALS[0] | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'cows' | 'sheep'>('all');
+  const [filter, setFilter] = useState<'all' | 'cows' | 'sheep' | 'chickens'>('all');
 
   // Hero background images - farm scenes
   const farmImages = [
     '/images/cows/IMG-20240527-WA0009.jpg',
-    '/images/cows/Richard 2_FIN.png',
+    '/images/cows/farm-layout.png',
     '/images/maize/Silage-on-maize-green-stems-unripe-on-field_Getty-Images-Large.jpeg',
     '/images/maize/header-1900-800-px-1-848x600.jpg',
     '/images/sheeps/GBZAMN3XwAA0jB-.jpg',
@@ -108,6 +172,7 @@ export default function PublicShowcase() {
     if (filter === 'all') return true;
     if (filter === 'cows') return animal.type === 'cow';
     if (filter === 'sheep') return animal.type === 'sheep';
+    if (filter === 'chickens') return animal.type === 'chicken';
     return true;
   });
 
@@ -118,6 +183,9 @@ export default function PublicShowcase() {
       case 'ewe': return 'bg-pink-500';
       case 'ram': return 'bg-indigo-600';
       case 'lamb': return 'bg-orange-400';
+      case 'cockerel': return 'bg-red-500';
+      case 'layer': return 'bg-yellow-500';
+      case 'chick': return 'bg-amber-400';
       default: return 'bg-gray-500';
     }
   };
@@ -137,6 +205,7 @@ export default function PublicShowcase() {
             <div className="hidden md:flex items-center gap-6 text-white text-sm">
               <span>🐄 {FARM_STATS.totalCows} Cows</span>
               <span>🐑 {FARM_STATS.totalSheep} Sheep</span>
+              <span>🐔 {FARM_STATS.totalChickens} Chickens</span>
               <span>🥛 {FARM_STATS.dailyProduction}L/day</span>
             </div>
 
@@ -230,6 +299,14 @@ export default function PublicShowcase() {
             >
               🐑 Sheep ({FARM_STATS.totalSheep})
             </button>
+            <button
+              onClick={() => setFilter('chickens')}
+              className={`px-5 py-2 rounded-full font-medium transition flex items-center gap-2 ${
+                filter === 'chickens' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              🐔 Chickens ({FARM_STATS.totalChickens})
+            </button>
           </div>
 
           {/* Animals Grid - Larger Cards */}
@@ -253,7 +330,7 @@ export default function PublicShowcase() {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl">{animal.type === 'cow' ? '🐄' : '🐑'}</span>
+                      <span className="text-2xl">{animal.type === 'cow' ? '🐄' : animal.type === 'sheep' ? '🐑' : '🐔'}</span>
                       <div>
                         <p className="font-bold text-white text-lg">{animal.name}</p>
                         <p className="text-gray-200 text-sm">{animal.tag} • {animal.breed}</p>
@@ -295,6 +372,21 @@ export default function PublicShowcase() {
                       <span className="font-semibold">Growing Lamb</span>
                     </div>
                   )}
+                  {animal.status === 'cockerel' && (
+                    <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                      <span className="font-semibold">🐓 Rooster</span>
+                    </div>
+                  )}
+                  {animal.status === 'layer' && animal.eggsPerWeek && (
+                    <div className="flex items-center gap-2 text-yellow-600 bg-yellow-50 px-3 py-2 rounded-lg">
+                      <span className="font-semibold">🥚 {animal.eggsPerWeek} eggs/week</span>
+                    </div>
+                  )}
+                  {animal.status === 'chick' && (
+                    <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                      <span className="font-semibold">🐥 Growing Chick</span>
+                    </div>
+                  )}
                   <p className="mt-3 text-sm text-gray-500 line-clamp-2">{animal.description}</p>
                 </div>
               </div>
@@ -313,8 +405,10 @@ export default function PublicShowcase() {
                 <FiX size={20} />
               </button>
               <div className="absolute bottom-3 left-3 flex gap-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium text-white ${selectedAnimal.type === 'cow' ? 'bg-green-600' : 'bg-amber-600'}`}>
-                  {selectedAnimal.type === 'cow' ? '🐄 Cow' : '🐑 Sheep'}
+                <span className={`px-3 py-1 rounded-full text-sm font-medium text-white ${
+                  selectedAnimal.type === 'cow' ? 'bg-green-600' : selectedAnimal.type === 'sheep' ? 'bg-amber-600' : 'bg-red-600'
+                }`}>
+                  {selectedAnimal.type === 'cow' ? '🐄 Cow' : selectedAnimal.type === 'sheep' ? '🐑 Sheep' : '🐔 Chicken'}
                 </span>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium text-white ${getStatusColor(selectedAnimal.status)}`}>
                   {selectedAnimal.status}
@@ -376,6 +470,12 @@ export default function PublicShowcase() {
                   <div className="bg-purple-50 p-4 rounded-xl col-span-2">
                     <p className="text-purple-600 text-sm">Expected Calving Date</p>
                     <p className="font-bold text-lg text-purple-800">{selectedAnimal.dueDate}</p>
+                  </div>
+                )}
+                {selectedAnimal.eggsPerWeek && (
+                  <div className="bg-yellow-50 p-4 rounded-xl col-span-2">
+                    <p className="text-yellow-600 text-sm">Egg Production</p>
+                    <p className="font-bold text-2xl text-yellow-800">🥚 {selectedAnimal.eggsPerWeek} eggs/week</p>
                   </div>
                 )}
               </div>
