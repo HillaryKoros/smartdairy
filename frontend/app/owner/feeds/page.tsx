@@ -64,15 +64,22 @@ export default function FeedsInventoryPage() {
 
   const itemForm = useForm({
     defaultValues: {
+      name: '',
       category: 'fodder',
       unit: 'kg',
       minimum_stock: 100,
+      description: '',
     },
   });
 
   const purchaseForm = useForm({
     defaultValues: {
+      feed_item: '',
       date: getTodayDate(),
+      quantity: '',
+      unit_price: '',
+      supplier: '',
+      notes: '',
     },
   });
 

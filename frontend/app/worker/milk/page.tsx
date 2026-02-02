@@ -45,8 +45,11 @@ export default function MilkLogPage() {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
+      cow: '',
       date: getTodayDate(),
       session: 'morning',
+      liters: '',
+      notes: '',
     },
   });
 

@@ -84,22 +84,32 @@ export default function SalesPage() {
 
   const buyerForm = useForm({
     defaultValues: {
+      name: '',
+      phone: '',
+      email: '',
       buyer_type: 'individual',
       credit_limit: 0,
+      address: '',
     },
   });
 
   const saleForm = useForm({
     defaultValues: {
+      buyer: '',
       date: getTodayDate(),
+      liters: '',
       price_per_liter: 60,
+      notes: '',
     },
   });
 
   const paymentForm = useForm({
     defaultValues: {
       date: getTodayDate(),
+      amount: '',
       payment_method: 'cash',
+      reference: '',
+      notes: '',
     },
   });
 

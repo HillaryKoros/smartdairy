@@ -64,20 +64,31 @@ export default function HealthPage() {
 
   const eventForm = useForm({
     defaultValues: {
+      cow: '',
       date: getTodayDate(),
+      symptoms: '',
+      temperature: '',
       severity: 'medium',
+      diagnosis: '',
+      notes: '',
     },
   });
 
   const resolveForm = useForm({
     defaultValues: {
       resolution_date: getTodayDate(),
+      diagnosis: '',
+      resolution_notes: '',
     },
   });
 
   const treatmentForm = useForm({
     defaultValues: {
       date: getTodayDate(),
+      medication: '',
+      dosage: '',
+      administered_by: '',
+      notes: '',
     },
   });
 

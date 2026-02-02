@@ -76,15 +76,21 @@ export default function TasksPage() {
 
   const templateForm = useForm({
     defaultValues: {
+      name: '',
+      description: '',
       frequency: 'daily',
       priority: 'medium',
+      default_time: '',
       is_active: true,
     },
   });
 
   const assignForm = useForm({
     defaultValues: {
+      assigned_to: '',
       scheduled_date: getTodayDate(),
+      due_time: '',
+      notes: '',
     },
   });
 

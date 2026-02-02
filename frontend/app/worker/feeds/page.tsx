@@ -36,8 +36,11 @@ export default function FeedUsagePage() {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
+      feed_item: '',
       date: getTodayDate(),
+      quantity: '',
       scan_method: 'manual',
+      notes: '',
     },
   });
 

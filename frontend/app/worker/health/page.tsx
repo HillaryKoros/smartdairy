@@ -47,8 +47,13 @@ export default function HealthPage() {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
+      cow: '',
       date: getTodayDate(),
+      symptoms: '',
+      temperature: '',
       severity: 'medium',
+      diagnosis: '',
+      notes: '',
     },
   });
 
