@@ -201,6 +201,104 @@ class Command(BaseCommand):
 
         self.stdout.write(f"  Created {task_count} task instances")
 
+        # Generate health events
+        from apps.health.models import HealthEvent, Treatment, Vaccination
+
+        vet = User.objects.filter(phone="0733333333").first()
+        health_count = 0
+
+        health_issues = [
+            {"symptoms": "Reduced appetite, lethargy", "diagnosis": "Mild fever", "severity": "low"},
+            {"symptoms": "Limping on front left leg", "diagnosis": "Hoof infection", "severity": "medium"},
+            {"symptoms": "Swollen udder, mastitis signs", "diagnosis": "Mastitis", "severity": "high"},
+            {"symptoms": "Coughing, nasal discharge", "diagnosis": "Respiratory infection", "severity": "medium"},
+            {"symptoms": "Bloating, discomfort", "diagnosis": "Bloat", "severity": "medium"},
+            {"symptoms": "Eye discharge, redness", "diagnosis": "Pinkeye", "severity": "low"},
+            {"symptoms": "Diarrhea, dehydration", "diagnosis": "Digestive upset", "severity": "medium"},
+        ]
+
+        for month_offset in range(12):
+            event_date = date.today() - timedelta(days=month_offset * 30 + random.randint(0, 15))
+            cow = random.choice(cows) if cows else None
+
+            if cow:
+                issue = random.choice(health_issues)
+                is_resolved = month_offset > 0  # Recent ones not resolved
+
+                event, created = HealthEvent.objects.get_or_create(
+                    farm=farm,
+                    cow=cow,
+                    date=event_date,
+                    symptoms=issue["symptoms"],
+                    defaults={
+                        "diagnosis": issue["diagnosis"],
+                        "severity": issue["severity"],
+                        "temperature": Decimal(str(round(random.uniform(38.0, 40.5), 1))),
+                        "reported_by": random.choice(workers) if workers else admin,
+                        "is_resolved": is_resolved,
+                        "resolved_at": timezone.now() - timedelta(days=month_offset * 30 - 3) if is_resolved else None,
+                    }
+                )
+                health_count += 1
+
+                # Add treatment for resolved events
+                if is_resolved and created:
+                    treatments = [
+                        {"name": "Penstrep", "dose": "10ml", "route": "injection_im", "withdrawal": 5},
+                        {"name": "Oxytetracycline", "dose": "15ml", "route": "injection_im", "withdrawal": 7},
+                        {"name": "Mastitis tube", "dose": "1 tube", "route": "intramammary", "withdrawal": 4},
+                        {"name": "Anti-inflammatory", "dose": "5ml", "route": "injection_iv", "withdrawal": 2},
+                    ]
+                    treatment_data = random.choice(treatments)
+
+                    Treatment.objects.get_or_create(
+                        farm=farm,
+                        cow=cow,
+                        health_event=event,
+                        date=event_date + timedelta(days=1),
+                        defaults={
+                            "treatment_name": treatment_data["name"],
+                            "dose": treatment_data["dose"],
+                            "route": treatment_data["route"],
+                            "administered_by": vet or admin,
+                            "cost": Decimal(str(random.randint(500, 2000))),
+                            "milk_withdrawal_days": treatment_data["withdrawal"],
+                        }
+                    )
+
+        self.stdout.write(f"  Created {health_count} health events")
+
+        # Generate vaccinations
+        vacc_count = 0
+        vaccines = [
+            {"name": "FMD Vaccine", "interval": 6},
+            {"name": "Blackquarter", "interval": 12},
+            {"name": "Anthrax", "interval": 12},
+            {"name": "Lumpy Skin Disease", "interval": 12},
+            {"name": "Brucellosis", "interval": 12},
+        ]
+
+        for cow in cows:
+            for vaccine in vaccines:
+                vacc_date = date.today() - timedelta(days=random.randint(30, 300))
+                next_due = vacc_date + timedelta(days=vaccine["interval"] * 30)
+
+                Vaccination.objects.get_or_create(
+                    farm=farm,
+                    cow=cow,
+                    vaccine_name=vaccine["name"],
+                    date=vacc_date,
+                    defaults={
+                        "dose": "2ml",
+                        "administered_by": vet or admin,
+                        "next_due_date": next_due,
+                        "cost": Decimal(str(random.randint(100, 500))),
+                    }
+                )
+                vacc_count += 1
+
+        self.stdout.write(f"  Created {vacc_count} vaccination records")
+
         self.stdout.write(self.style.SUCCESS("\nYearly statistics generated successfully!"))
 
         # Print summary
